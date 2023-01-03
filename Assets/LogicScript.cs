@@ -7,7 +7,9 @@ using UnityEngine.SceneManagement;
 public class LogicScript : MonoBehaviour
 {
     public int playerScore;
+    public int highScore;
     public Text scoreText;
+    public Text highScoreText;
     public GameObject gameOverScreen;
     public BirdScript bird;
     public AudioSource dingSFX;
@@ -15,6 +17,8 @@ public class LogicScript : MonoBehaviour
     void Start()
     {
         bird = GameObject.FindGameObjectWithTag("Bird").GetComponent<BirdScript>();
+        highScore = PlayerPrefs.GetInt("highscore", 0);
+        highScoreText.text = "High Score: " + highScore.ToString();
     }
 
     [ContextMenu("Increase Score")]
@@ -39,5 +43,12 @@ public class LogicScript : MonoBehaviour
     public void gameOver()
     {
         gameOverScreen.SetActive(true);
+
+        if (playerScore > highScore)
+        {
+            highScore = playerScore;
+            PlayerPrefs.SetInt("highscore", playerScore);
+            highScoreText.text = "High Score: " + highScore.ToString();
+        }
     }
 }
